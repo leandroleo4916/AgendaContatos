@@ -13,7 +13,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.agendadecontatos.IOrder
 import com.example.agendadecontatos.R
 import com.example.agendadecontatos.adapter.AdapterContact
 import com.example.agendadecontatos.entity.Contacts
@@ -31,7 +30,6 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     private var titleVisible = false
     private var textTitle: TextView? = null
     private var appBarLayout: AppBarLayout? = null
-    lateinit var call: IOrder
     private val REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
