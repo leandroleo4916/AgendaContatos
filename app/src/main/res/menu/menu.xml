@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/order_az"
+        android:title="A - Z" />
+
+    <item
+        android:id="@+id/order_za"
+        android:title="Z - A" />
+
+    <item
+        android:id="@+id/recent"
+        android:title="Recentes" />
+
+    <item
+        android:id="@+id/old"
+        android:title="Antigos" />
+
+</menu>
