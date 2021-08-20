@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_name" />
 
     <ImageView
-        android:id="@+id/edit_tarefa"
+        android:id="@+id/edit_contact"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginEnd="18dp"

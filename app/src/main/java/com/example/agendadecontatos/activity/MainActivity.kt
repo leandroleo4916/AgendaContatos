@@ -1,7 +1,10 @@
 package com.example.agendadecontatos.activity
 
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.View
@@ -21,7 +24,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.abs
 
-class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
+class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, ItemClickEdit,
+    View.OnClickListener {
 
     private lateinit var coordinator: CoordinatorLayout
     private lateinit var contactAdapter: AdapterContact
@@ -40,7 +44,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
             != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                     arrayOf(android.Manifest.permission.READ_CONTACTS), REQUEST) }
-        else { setContacts() }
+        else { getContacts() }
 
         instanceView()
         listener()
@@ -50,10 +54,10 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST) setContacts()
+        if (requestCode == REQUEST) getContacts()
     }
 
-    private fun setContacts() {
+    private fun getContacts() {
 
         val listContacts: ArrayList<Contacts> = arrayListOf()
 
@@ -63,14 +67,16 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
         if (cursor != null) {
             while (cursor.moveToNext()){
 
-                val id = cursor.getInt(cursor.getColumnIndex(
+                val id = cursor.getLong(cursor.getColumnIndex(
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                val lookupKey = cursor.getString(cursor.getColumnIndex(
+                    ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY))
                 val name = cursor.getString(cursor.getColumnIndex(
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                 val phone = cursor.getString(cursor.getColumnIndex(
                     ContactsContract.CommonDataKinds.Phone.NUMBER))
 
-                listContacts.add(Contacts(id, name, phone))
+                listContacts.add(Contacts(id, lookupKey, name, phone))
             }
             cursor.close()
         }
@@ -92,9 +98,30 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     override fun onClick(view: View?) {
         when (view) {
             filter_contact -> showMenuFilter()
-            add_contact -> {}
+            add_contact -> intentContact()
             option_contact -> {}
         }
+    }
+
+    private fun intentContact(){
+        val intent = Intent(ContactsContract.Intents.Insert.ACTION).apply {
+            type = ContactsContract.RawContacts.CONTENT_TYPE
+        }
+        startActivity(intent)
+    }
+
+    private fun updateContact(contact: Contacts){
+        val cursor: Cursor? = null
+        var selectedUri: Uri?
+
+        cursor.apply {
+            selectedUri = ContactsContract.Contacts.getLookupUri(contact.id, contact.lookupKey)
+        }
+
+        val intent = Intent(Intent.ACTION_EDIT).apply{
+            setDataAndType(selectedUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE)
+        }
+        startActivity(intent)
     }
 
     private fun showMenuFilter(){
@@ -115,7 +142,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     private fun createAdapter(listContacts: ArrayList<Contacts>) {
         val recycler = findViewById<RecyclerView>(R.id.recycler_contacts)
         recycler.layoutManager = LinearLayoutManager(this)
-        contactAdapter = AdapterContact(listContacts)
+        contactAdapter = AdapterContact(listContacts, this)
         recycler.adapter = contactAdapter
     }
 
@@ -169,5 +196,9 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
         alphaAnimation.duration = duration
         alphaAnimation.fillAfter = true
         v.startAnimation(alphaAnimation)
+    }
+
+    override fun clickEdit(contact: Contacts) {
+        updateContact(contact)
     }
 }
