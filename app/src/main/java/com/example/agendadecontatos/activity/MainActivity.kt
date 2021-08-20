@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.agendadecontatos.R
 import com.example.agendadecontatos.adapter.AdapterContact
 import com.example.agendadecontatos.entity.Contacts
+import com.example.agendadecontatos.interfaces.ItemClickEdit
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*

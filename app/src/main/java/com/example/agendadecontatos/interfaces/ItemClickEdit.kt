@@ -1,4 +1,4 @@
-package com.example.agendadecontatos.activity
+package com.example.agendadecontatos.interfaces
 
 import com.example.agendadecontatos.entity.Contacts
 
