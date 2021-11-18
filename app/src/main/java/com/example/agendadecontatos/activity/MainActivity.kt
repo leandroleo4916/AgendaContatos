@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     private var titleVisible = false
     private var textTitle: TextView? = null
     private var appBarLayout: AppBarLayout? = null
-    private val REQUEST = 1
+    private val request = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
             != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.READ_CONTACTS), REQUEST) }
+                    arrayOf(android.Manifest.permission.READ_CONTACTS), request) }
         else { getContacts() }
 
         instanceView()
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST) getContacts()
+        if (requestCode == request) getContacts()
     }
 
     private fun getContacts() {
@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
         val intent = Intent(ContactsContract.Intents.Insert.ACTION).apply {
             type = ContactsContract.RawContacts.CONTENT_TYPE
         }
+        intent.putExtra("finishActivityOnSaveCompleted", true)
         startActivity(intent)
     }
 
@@ -118,10 +119,10 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
         cursor.apply {
             selectedUri = ContactsContract.Contacts.getLookupUri(contact.id, contact.lookupKey)
         }
-
         val intent = Intent(Intent.ACTION_EDIT).apply{
             setDataAndType(selectedUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE)
         }
+        intent.putExtra("finishActivityOnSaveCompleted", true)
         startActivity(intent)
     }
 

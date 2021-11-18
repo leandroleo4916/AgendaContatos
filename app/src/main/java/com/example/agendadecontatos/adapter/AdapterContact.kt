@@ -25,8 +25,7 @@ class AdapterContact(listContact: ArrayList<Contacts>, private val listener: Mai
 
     override fun onBindViewHolder(holderContact: ViewHolderContact, position: Int) {
 
-        val contact = listName[position]
-        holderContact.bind(contact)
+        holderContact.bind(listName[position])
     }
 
     override fun getItemCount(): Int {
@@ -36,9 +35,7 @@ class AdapterContact(listContact: ArrayList<Contacts>, private val listener: Mai
     inner class ViewHolderContact(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener{
 
-        init {
-            itemView.edit_contact.setOnClickListener(this)
-        }
+        init { itemView.edit_contact.setOnClickListener(this) }
 
         fun bind(contact: Contacts){
             val textName = itemView.findViewById<TextView>(R.id.text_name)
