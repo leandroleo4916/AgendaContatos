@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
             != PackageManager.PERMISSION_GRANTED) {
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
 
     private fun listener() {
         binding.run {
-            filterContact.setOnClickListener { showMenuFilter() }
+            filterContact.setOnClickListener{ showMenuFilter() }
             addContact.setOnClickListener{ intentContact() }
             optionContact.setOnClickListener{}
         }
