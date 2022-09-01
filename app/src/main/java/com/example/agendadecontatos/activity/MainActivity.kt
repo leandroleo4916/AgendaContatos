@@ -3,7 +3,6 @@ package com.example.agendadecontatos.activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -18,16 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.agendadecontatos.R
 import com.example.agendadecontatos.adapter.AdapterContact
+import com.example.agendadecontatos.databinding.ActivityMainBinding
 import com.example.agendadecontatos.entity.Contacts
 import com.example.agendadecontatos.interfaces.ItemClickEdit
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.abs
 
-class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, ItemClickEdit,
-    View.OnClickListener {
+class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, ItemClickEdit {
 
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var coordinator: CoordinatorLayout
     private lateinit var contactAdapter: AdapterContact
     private val showTitleToolBar = 0.9f
@@ -91,16 +90,10 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
     }
 
     private fun listener() {
-        filter_contact.setOnClickListener(this)
-        add_contact.setOnClickListener(this)
-        option_contact.setOnClickListener(this)
-    }
-
-    override fun onClick(view: View?) {
-        when (view) {
-            filter_contact -> showMenuFilter()
-            add_contact -> intentContact()
-            option_contact -> {}
+        binding.run {
+            filterContact.setOnClickListener { showMenuFilter() }
+            addContact.setOnClickListener{ intentContact() }
+            optionContact.setOnClickListener{}
         }
     }
 
@@ -159,16 +152,6 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, 
         appBarLayout = findViewById(R.id.appbar)
         textTitle = findViewById(R.id.text_title)
         appBarLayout!!.addOnOffsetChangedListener(this)
-    }
-
-    private fun showSnackBar(message: Int) {
-        Snackbar.make(coordinator,
-            message, Snackbar.LENGTH_LONG)
-            .setTextColor(Color.WHITE)
-            .setActionTextColor(Color.WHITE)
-            .setBackgroundTint(Color.BLACK)
-            .setAction("Ok") {}
-            .show()
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
